@@ -28,6 +28,7 @@ import com.dji.sdk.sample.demo.camera.XT2CameraView;
 import com.dji.sdk.sample.demo.datalocker.AccessLockerView;
 import com.dji.sdk.sample.demo.flightcontroller.CompassCalibrationView;
 import com.dji.sdk.sample.demo.flightcontroller.FlightAssistantPushDataView;
+import com.dji.sdk.sample.demo.flightcontroller.FlightCustomView;
 import com.dji.sdk.sample.demo.flightcontroller.FlightHubView;
 import com.dji.sdk.sample.demo.flightcontroller.FlightLimitationView;
 import com.dji.sdk.sample.demo.flightcontroller.OrientationModeView;
@@ -156,6 +157,7 @@ public class DemoListView extends FrameLayout {
                                        FlightLimitationView.class),
                          new GroupItem(R.string.flight_controller_listview_orientation_mode, OrientationModeView.class),
                          new GroupItem(R.string.flight_controller_listview_virtual_stick, VirtualStickView.class),
+                new GroupItem(R.string.flight_controller_listview_flight_custom, FlightCustomView.class),
                          new GroupItem(R.string.flight_controller_listview_intelligent_flight_assistant,
                                        FlightAssistantPushDataView.class));
 
