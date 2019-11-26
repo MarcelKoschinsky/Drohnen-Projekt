@@ -21,6 +21,10 @@
 
     <string name="success">Success</string>
     <string name="login">Login</string>
+	
+	<!-- Custom Components (New List)-->
+	<string name="component_listview_custom_creations">Custom Creations</string>
+	<string name="custom_creations_drone_control">Drone Control</string>
 
     <!-- Component list -->
     <string name="component_listview_component">Component</string>

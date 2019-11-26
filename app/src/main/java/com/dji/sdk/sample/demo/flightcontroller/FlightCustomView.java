@@ -56,6 +56,7 @@ public class FlightCustomView extends RelativeLayout
     private Button btnDeactivateControlModes;
     private ToggleButton btnSimulator;
     private Button btnTakeOff;
+    private Button btnLand;
 
     private TextView textView;
     private TextView textView_Controls;
@@ -124,6 +125,7 @@ public class FlightCustomView extends RelativeLayout
         btnActivateControlModes = (Button) findViewById(R.id.btn_activate_control_modes);
         btnDeactivateControlModes = (Button) findViewById(R.id.btn_deactivate_control_modes);
         btnTakeOff = (Button) findViewById(R.id.btn_take_off);
+        btnLand = (Button) findViewById(R.id.btn_land);
 
         btnSimulator = (ToggleButton) findViewById(R.id.btn_start_simulator);
 
@@ -139,6 +141,7 @@ public class FlightCustomView extends RelativeLayout
         btnActivateControlModes.setOnClickListener(this);
         btnDeactivateControlModes.setOnClickListener(this);
         btnTakeOff.setOnClickListener(this);
+        btnLand.setOnClickListener(this);
         btnSimulator.setOnCheckedChangeListener(FlightCustomView.this);
 
         Boolean isSimulatorOn = (Boolean) KeyManager.getInstance().getValue(isSimulatorActived);
@@ -308,6 +311,17 @@ public class FlightCustomView extends RelativeLayout
             case R.id.btn_take_off:
 
                 flightController.startTakeoff(new CommonCallbacks.CompletionCallback() {
+                    @Override
+                    public void onResult(DJIError djiError) {
+                        DialogUtils.showDialogBasedOnError(getContext(), djiError);
+                    }
+                });
+
+                break;
+
+            case R.id.btn_land:
+
+                flightController.startLanding(new CommonCallbacks.CompletionCallback() {
                     @Override
                     public void onResult(DJIError djiError) {
                         DialogUtils.showDialogBasedOnError(getContext(), djiError);
