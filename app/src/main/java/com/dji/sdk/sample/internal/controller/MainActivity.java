@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                             lastProcess = process;
                             showProgress(process);
                             if (process % 25 == 0){
-                                ToastUtils.setResultToToast("DB load process : " + process);
+                                ToastUtils.setResultToToast("DB load process : " + process + "%");
                             }else if (process == 0){
                                 ToastUtils.setResultToToast("DB load begin");
                             }

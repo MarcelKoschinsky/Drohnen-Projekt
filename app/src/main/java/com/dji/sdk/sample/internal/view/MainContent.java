@@ -29,6 +29,8 @@ import com.dji.sdk.sample.internal.utils.GeneralUtils;
 import com.dji.sdk.sample.internal.utils.ToastUtils;
 import com.squareup.otto.Subscribe;
 
+import org.w3c.dom.Text;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import dji.common.error.DJIError;
@@ -53,6 +55,9 @@ public class MainContent extends RelativeLayout {
 
     public static final String TAG = MainContent.class.getName();
     private static BluetoothProductConnector connector = null;
+    private TextView mTitleText;
+    private TextView mTitleText2;
+    private TextView mBlankLine;
     private TextView mTextConnectionStatus;
     private TextView mTextProduct;
     private TextView mTextModelAvailable;
@@ -89,6 +94,9 @@ public class MainContent extends RelativeLayout {
     private void initUI() {
         Log.v(TAG, "initUI");
 
+        mTitleText = (TextView) findViewById(R.id.text_title_name);
+        mTitleText2 = (TextView) findViewById(R.id.text_title_name2);
+        mBlankLine = (TextView) findViewById(R.id.text_blank_line);
         mTextConnectionStatus = (TextView) findViewById(R.id.text_connection_status);
         mTextModelAvailable = (TextView) findViewById(R.id.text_model_available);
         mTextProduct = (TextView) findViewById(R.id.text_product_info);
