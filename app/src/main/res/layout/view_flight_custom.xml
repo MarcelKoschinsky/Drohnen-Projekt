@@ -78,7 +78,7 @@
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@id/btn_take_off"
         style="@style/common_button"
-        android:layout_below="@id/btn_deactivate_control_modes"
+        android:layout_below="@id/btn_enable_virtual_stick"
         android:layout_alignStart="@+id/btn_enable_virtual_stick"/>
 
 
