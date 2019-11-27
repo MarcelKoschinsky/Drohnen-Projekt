@@ -1,9 +1,9 @@
 <?php
 echo date("H:i:s");
 
-$db = new mysqli('localhost','TestUser', 'root', 'test');
+$db = new mysqli('localhost','TestUser', 'root', 'drohnenProjekt');
 
-$erg = $db->query("Select * from testdaten") or die($db->error);
+$erg = $db->query("Select * from bilder") or die($db->error);
 
 if($erg->num_rows){
   echo "<p>Datenvorhanden: Anzahl ";
@@ -14,13 +14,14 @@ $datensatz = $erg->fetch_all(MYSQLI_ASSOC);
 
 foreach($datensatz as $zeile) {
   echo '<br>';
-  echo '<br>' . $zeile['Nummer'] . ' ' . $zeile['Name'] . ' ' . $zeile['Datum'] ;
+  echo '<br> ' . $zeile['ID'] ;
+  echo '<br> ' . $zeile['Bildname'] ;
+
+  $bild = $zeile['Bild'];
+  echo "<img scr='$bild'>";
+  echo '<br> ' . $zeile['Zeitstempel'] ;
 }
+//$pfad = "C:\Users\Alexander\Desktop\DrohnenBilder";
 
-/*     hässliche Auflistung
-echo "<pre>";
-print_r($datensatz);
-echo "</pre>"
-*/
 
-?>
+	?>
