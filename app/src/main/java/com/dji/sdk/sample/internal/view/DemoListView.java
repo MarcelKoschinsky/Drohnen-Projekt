@@ -85,7 +85,7 @@ public class DemoListView extends FrameLayout {
         builder.addGroup(R.string.component_listview_custom_creations,
                          false,
                 new GroupItem(R.string.custom_creations_drone_control, FlightCustomView.class),
-                new GroupItem(R.string.custom_creations_drone_control, FlightCustomExtendedView.class));
+                new GroupItem(R.string.custom_creations_drone_control_extended, FlightCustomExtendedView.class));
 
         // Set-up ExpandableListView
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandable_list);
