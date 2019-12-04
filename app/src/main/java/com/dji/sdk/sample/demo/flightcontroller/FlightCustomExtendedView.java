@@ -10,6 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+
+
 import androidx.annotation.NonNull;
 
 import com.dji.sdk.sample.R;
@@ -39,11 +41,25 @@ import dji.keysdk.KeyManager;
 import dji.sdk.flightcontroller.FlightController;
 import dji.sdk.flightcontroller.Simulator;
 
+// Imports für Camera View
+import android.app.Service;
+import android.content.Context;
+import android.graphics.SurfaceTexture;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.TextureView;
+import android.widget.FrameLayout;
+import com.dji.sdk.sample.R;
+import dji.sdk.camera.VideoFeeder;
+import dji.sdk.codec.DJICodecManager;
+
+
 /**
  * Class for virtual stick.
  */
 public class FlightCustomExtendedView extends RelativeLayout
-        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, PresentableView {
+        implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, PresentableView, TextureView.SurfaceTextureListener {
 
     private boolean yawControlModeFlag = true;
     private boolean rollPitchControlModeFlag = true;
@@ -57,6 +73,9 @@ public class FlightCustomExtendedView extends RelativeLayout
     private ToggleButton btnSimulator;
     private Button btnTakeOff;
     private Button btnLand;
+    private Button btnShootPhoto;
+
+
 
     private TextView textView;
     private TextView textView_Controls;
@@ -73,6 +92,11 @@ public class FlightCustomExtendedView extends RelativeLayout
     private float yaw;
     private float throttle;
     private FlightControllerKey isSimulatorActived;
+
+    //Variablen für CameraView
+    private VideoFeeder.VideoDataListener videoDataListener = null;
+    private DJICodecManager codecManager = null;
+
 
     public FlightCustomExtendedView(Context context) {
         super(context);
@@ -113,6 +137,7 @@ public class FlightCustomExtendedView extends RelativeLayout
 
         initAllKeys();
         initUI();
+
     }
 
     private void initAllKeys() {
@@ -126,6 +151,7 @@ public class FlightCustomExtendedView extends RelativeLayout
         btnDeactivateControlModes = (Button) findViewById(R.id.btn_deactivate_control_modes);
         btnTakeOff = (Button) findViewById(R.id.btn_take_off);
         btnLand = (Button) findViewById(R.id.btn_land);
+        btnShootPhoto = (Button) findViewById(R.id.btn_shoot_photo);
 
         btnSimulator = (ToggleButton) findViewById(R.id.btn_start_simulator);
 
@@ -136,6 +162,8 @@ public class FlightCustomExtendedView extends RelativeLayout
         screenJoystickRight = (OnScreenJoystick) findViewById(R.id.directionJoystickRight);
         screenJoystickLeft = (OnScreenJoystick) findViewById(R.id.directionJoystickLeft);
 
+
+
         btnEnableVirtualStick.setOnClickListener(this);
         btnDisableVirtualStick.setOnClickListener(this);
         btnActivateControlModes.setOnClickListener(this);
@@ -143,12 +171,67 @@ public class FlightCustomExtendedView extends RelativeLayout
         btnTakeOff.setOnClickListener(this);
         btnLand.setOnClickListener(this);
         btnSimulator.setOnCheckedChangeListener(FlightCustomExtendedView.this);
+        btnShootPhoto.setOnClickListener(this);
 
         Boolean isSimulatorOn = (Boolean) KeyManager.getInstance().getValue(isSimulatorActived);
         if (isSimulatorOn != null && isSimulatorOn) {
             btnSimulator.setChecked(true);
             textView.setText("Simulator is On.");
         }
+
+
+        //Camera Feed
+        TextureView mVideoSurface = (TextureView) findViewById(R.id.video_previewer);
+
+        if (null != mVideoSurface) {
+            mVideoSurface.setSurfaceTextureListener((TextureView.SurfaceTextureListener) this);
+
+            // This callback is for
+
+            videoDataListener = new VideoFeeder.VideoDataListener() {
+                @Override
+                public void onReceive(byte[] bytes, int size) {
+                    if (null != codecManager) {
+                        codecManager.sendDataToDecoder(bytes, size);
+                    }
+                }
+            };
+        }
+        initSDKCallback();
+
+    }
+
+    private void initSDKCallback() {
+        try {
+            VideoFeeder.getInstance().getPrimaryVideoFeed().addVideoDataListener(videoDataListener);
+        } catch (Exception ignored) {
+        }
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        if (codecManager == null) {
+            codecManager = new DJICodecManager(getContext(), surface, width, height);
+        }
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        if (codecManager != null) {
+            codecManager.cleanSurface();
+            codecManager = null;
+        }
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
     }
 
     private void setUpListeners() {
@@ -330,6 +413,14 @@ public class FlightCustomExtendedView extends RelativeLayout
 
                 break;
 
+            /**
+             * case R.id.btn_shoot_photo:
+             *
+             *
+             * break;
+             */
+
+
             default:
                 break;
         }
@@ -370,6 +461,8 @@ public class FlightCustomExtendedView extends RelativeLayout
             });
         }
     }
+
+
 
     @Override
     public int getDescription() {
